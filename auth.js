@@ -48,7 +48,7 @@ function showAuthGate(supabase) {
       const password = document.querySelector('#auth-password').value;
       message.textContent = 'Please wait...';
       const result = signUp
-        ? await supabase.auth.signUp({ email, password })
+        ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.href } })
         : await supabase.auth.signInWithPassword({ email, password });
       if (result.error) { message.textContent = result.error.message; return; }
       if (!result.data.session) { message.textContent = 'Check your email, confirm your account, then sign in.'; return; }
