@@ -22,4 +22,3 @@ create policy "Students delete own profile" on public.profiles for delete to aut
 create policy "Students read own subjects" on public.student_subjects for select to authenticated using ((select auth.uid()) = user_id);
 create policy "Students create own subjects" on public.student_subjects for insert to authenticated with check ((select auth.uid()) = user_id);
 create policy "Students delete own subjects" on public.student_subjects for delete to authenticated using ((select auth.uid()) = user_id);
-
