@@ -17,13 +17,13 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js';
-import { FIREBASE_CONFIG } from './config.js';
+import { FIREBASE_CONFIG } from './config.js?v=firebase-1';
 
 const configured = FIREBASE_CONFIG.apiKey?.length > 20 && FIREBASE_CONFIG.projectId?.length > 2;
 
 export async function initAuth(fallbackState) {
-  window.studymonkeyAuth = { isConfigured: configured, email: null, storageReady: false, syncState: () => {} };
-  if (!configured) return fallbackState;
+  window.studymonkeyAuth = { isConfigured: configured, email: null, storageKey: 'studymonkey', storageReady: false, syncState: () => {} };
+  if (!configured) return readLocalState('studymonkey', fallbackState);
 
   let auth;
   let database;
@@ -41,7 +41,8 @@ export async function initAuth(fallbackState) {
   if (!user) user = await showAuthGate(auth);
   if (!user) return fallbackState;
 
-  let state = fallbackState;
+  const storageKey = `studymonkey:${user.uid}`;
+  let state = readLocalState(storageKey, fallbackState);
   let storageReady = false;
   try {
     const studentSnapshot = await getDoc(doc(database, 'students', user.uid));
@@ -52,6 +53,13 @@ export async function initAuth(fallbackState) {
         ...(studentData.appState || {}),
         subjects: studentData.subjects?.length ? studentData.subjects : fallbackState.subjects
       };
+    } else {
+      await setDoc(doc(database, 'students', user.uid), {
+        email: user.email,
+        subjects: state.subjects,
+        appState: { ...state, subjects: undefined },
+        updatedAt: serverTimestamp()
+      });
     }
     storageReady = true;
   } catch (error) {
@@ -61,6 +69,7 @@ export async function initAuth(fallbackState) {
   window.studymonkeyAuth = {
     isConfigured: true,
     email: user.email,
+    storageKey,
     storageReady,
     signOut: async () => {
       await signOut(auth);
@@ -81,6 +90,15 @@ export async function initAuth(fallbackState) {
     }
   };
   return state;
+}
+
+function readLocalState(storageKey, fallbackState) {
+  try {
+    const savedState = localStorage.getItem(storageKey);
+    return savedState ? { ...fallbackState, ...JSON.parse(savedState) } : fallbackState;
+  } catch (error) {
+    return fallbackState;
+  }
 }
 
 function waitForUser(auth) {
@@ -171,3 +189,4 @@ function friendlyAuthError(code) {
 function showConnectionProblem() {
   document.querySelector('#app').innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Accounts need one small fix</h1><p>StudyMonkey could not connect to Firebase. Check the Firebase configuration, then refresh this page.</p></section></main>`;
 }
+
