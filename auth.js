@@ -52,17 +52,20 @@ export async function initAuth(fallbackState) {
 }
 
 function showAuthGate(supabase) {
-  document.body.innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Your private study space</h1><p>Create an account to keep your subjects, progress, and quiz results safe across devices.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required autocomplete="email"></label><label>Password<input id="auth-password" type="password" minlength="8" required autocomplete="current-password"></label><p id="auth-message" role="status"></p><button class="primary" type="submit">Sign in</button><button id="sign-up" type="button">Create account</button><button id="reset-password" class="text-button" type="button">Forgot password?</button></form><p class="auth-note">Your password is handled by Supabase, not shown to StudyMonkey.</p></section></main>`;
+  const app = document.querySelector('#app');
+  app.innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Your private study space</h1><p>Create an account to keep your subjects, progress, and quiz results safe across devices.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required autocomplete="email"></label><label>Password<input id="auth-password" type="password" minlength="8" required autocomplete="current-password"></label><p id="auth-message" role="status"></p><button class="primary" type="submit">Sign in</button><button id="sign-up" type="button">Create account</button><button id="reset-password" class="text-button" type="button">Forgot password?</button></form><p class="auth-note">Your password is handled securely by Supabase. New accounts may need email confirmation before signing in.</p></section></main>`;
   return new Promise(resolve => {
     const message = document.querySelector('#auth-message');
+    const form = document.querySelector('#auth-form');
     const submit = async signUp => {
+      if (!form.reportValidity()) return;
       const email = document.querySelector('#auth-email').value;
       const password = document.querySelector('#auth-password').value;
       message.textContent = 'Please wait...';
       let result;
       try {
         result = signUp
-          ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.href } })
+          ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}${window.location.pathname}` } })
           : await supabase.auth.signInWithPassword({ email, password });
       } catch (error) {
         message.textContent = 'We could not reach the account service. Please try again.';
@@ -72,7 +75,7 @@ function showAuthGate(supabase) {
       if (!result.data.session) { message.textContent = 'Check your email, confirm your account, then sign in.'; return; }
       resolve(result.data.session);
     };
-    document.querySelector('#auth-form').addEventListener('submit', event => { event.preventDefault(); submit(false); });
+    form.addEventListener('submit', event => { event.preventDefault(); submit(false); });
     document.querySelector('#sign-up').addEventListener('click', () => submit(true));
     document.querySelector('#reset-password').addEventListener('click', async () => {
       const email = document.querySelector('#auth-email').value;
@@ -85,5 +88,6 @@ function showAuthGate(supabase) {
 }
 
 function showConnectionProblem() {
-  document.body.innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Accounts need one small fix</h1><p>StudyMonkey could not connect to its account service. Check the Supabase project URL and publishable key, then refresh this page.</p></section></main>`;
+  document.querySelector('#app').innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Accounts need one small fix</h1><p>StudyMonkey could not connect to its account service. Check the Supabase project URL and publishable key, then refresh this page.</p></section></main>`;
 }
+
