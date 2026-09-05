@@ -1,15 +1,21 @@
+import { initAuth } from './auth.js';
+
 const subjects = {
   Biology: ['Classification', 'Cells'], Mathematics: ['Number', 'Algebra'], 'Computer Science': ['Data', 'Networks'],
   Physics: ['Measurements', 'Motion'], Chemistry: ['Particles', 'Experiments'], 'Additional Maths': ['Functions', 'Quadratics'],
   Accounting: ['The accounting cycle', 'Double entry'], Economics: ['Basic economic problem', 'Demand and supply'],
   'Business Studies': ['Business activity', 'People in business'], English: ['Reading skills', 'Writing skills']
 };
-const state = JSON.parse(localStorage.getItem('studymonkey') || '{"subjects":["Biology"],"trial":3,"scores":[],"mode":"dark"}');
+let state = JSON.parse(localStorage.getItem('studymonkey') || '{"subjects":["Biology"],"trial":3,"scores":[],"mode":"dark"}');
+state = await initAuth(state);
 let screen = 'dashboard';
 const app = document.querySelector('#app');
-const save = () => localStorage.setItem('studymonkey', JSON.stringify(state));
+const save = () => {
+  localStorage.setItem('studymonkey', JSON.stringify(state));
+  window.studymonkeyAuth?.syncState(state);
+};
 const lessonText = 'Living things grow, use energy, respond to changes and reproduce. The tutor breaks difficult ideas into small steps so you can learn at your own pace.';
-function shell(content) { return `<div class="shell"><aside class="sidebar"><h2 class="brand">✦ StudyMonkey</h2><div class="subject-label">IGCSE STUDY TUTOR</div><nav class="nav">${[['dashboard','Dashboard'],['learn','Learn chapters'],['tutor','Ask the tutor'],['quiz','Quick quiz'],['progress','My progress'],['settings','Settings']].map(([id,label]) => `<button class="${screen===id?'active':''}" onclick="go('${id}')">${label}</button>`).join('')}</nav><div class="profile">Amina<br><span>${state.trial} free classes left</span></div></aside><section class="content">${content}</section></div>`; }
+function shell(content) { const notice = window.studymonkeyAuth?.isConfigured ? '' : '<div class="notice">Account setup is ready. Add your Supabase project details in <code>config.js</code> to enable real student sign-in.</div>'; return `<div class="shell"><aside class="sidebar"><h2 class="brand">✦ StudyMonkey</h2><div class="subject-label">IGCSE STUDY TUTOR</div><nav class="nav">${[['dashboard','Dashboard'],['learn','Learn chapters'],['tutor','Ask the tutor'],['quiz','Quick quiz'],['progress','My progress'],['settings','Settings']].map(([id,label]) => `<button class="${screen===id?'active':''}" onclick="go('${id}')">${label}</button>`).join('')}</nav><div class="profile">${window.studymonkeyAuth?.email || 'StudyMonkey student'}<br><span>${state.trial} free classes left</span></div></aside><section class="content">${notice}${content}</section></div>`; }
 function dashboard() { const options = state.subjects.map(s=>`<option>${s}</option>`).join(''); return shell(`<div class="toolbar"><div><div class="eyebrow">WELCOME BACK</div><h1>What will you learn today?</h1><p>Pick a chapter, ask for help, then test what you know.</p></div><select onchange="state.current=this.value;save();render()">${options}</select></div><div class="hero"><b>Continue learning</b><p>${state.current || state.subjects[0]} · Chapter 1: ${subjects[state.current || state.subjects[0]][0]}</p><button class="primary" onclick="go('learn')">Resume lesson</button></div><div class="cards">${state.subjects.map(subject => `<article class="card"><h3>${subject}</h3><p>Start with your first two chapters.</p><ul><li>Chapter 1: ${subjects[subject][0]}</li><li>Chapter 2: ${subjects[subject][1]}</li></ul><button onclick="state.current='${subject}';save();go('learn')">Open subject</button></article>`).join('')}</div>`); }
 function learn() { const subject=state.current||state.subjects[0], chapter=subjects[subject][0]; return shell(`<div class="eyebrow">${subject.toUpperCase()} · CHAPTER 1</div><h1>${chapter}</h1><p>Short original lessons, made for your level.</p><article class="lesson"><h2>Simple explanation</h2><p>${lessonText}</p><div class="terms"><div class="term"><b>Key term</b><p>Organism: a living thing.</p></div><div class="term"><b>Example</b><p>A seed can grow into a plant.</p></div></div><div class="actions"><button onclick="go('tutor')">Ask about this lesson</button> <button class="primary" onclick="consumeTrial('quiz')">Try a quiz</button></div></article>`); }
 function tutor() { return shell(`<div class="eyebrow">AI TUTOR</div><h1>Ask any doubt</h1><p>Try “Explain this more simply” or ask for an example.</p><div class="chat" id="chat"><div class="message">Hi! What are you finding difficult today?</div></div><div class="ask"><input id="question" placeholder="Ask anything you are unsure about..." /><button class="primary" onclick="askTutor()">Send</button></div>`); }
