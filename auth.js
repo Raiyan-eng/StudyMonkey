@@ -17,7 +17,7 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js';
-import { FIREBASE_CONFIG } from './config.js?v=firebase-1';
+import { FIREBASE_CONFIG } from './config.js?v=firebase-2';
 
 const configured = FIREBASE_CONFIG.apiKey?.length > 20 && FIREBASE_CONFIG.projectId?.length > 2;
 
@@ -57,7 +57,7 @@ export async function initAuth(fallbackState) {
       await setDoc(doc(database, 'students', user.uid), {
         email: user.email,
         subjects: state.subjects,
-        appState: { ...state, subjects: undefined },
+        appState: createCloudAppState(state),
         updatedAt: serverTimestamp()
       });
     }
@@ -80,7 +80,7 @@ export async function initAuth(fallbackState) {
         await setDoc(doc(database, 'students', user.uid), {
           email: user.email,
           subjects: currentState.subjects,
-          appState: { ...currentState, subjects: undefined },
+          appState: createCloudAppState(currentState),
           updatedAt: serverTimestamp()
         }, { merge: true });
         window.studymonkeyAuth.storageReady = true;
@@ -90,6 +90,11 @@ export async function initAuth(fallbackState) {
     }
   };
   return state;
+}
+
+function createCloudAppState(state) {
+  const { subjects, ...appState } = state;
+  return appState;
 }
 
 function readLocalState(storageKey, fallbackState) {
