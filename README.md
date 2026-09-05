@@ -19,3 +19,12 @@ Open `index.html` in a browser. No installation is required.
 
 This is a front-end prototype. A production version still needs secure authentication, a private database, server-side AI calls, payment processing, a real privacy policy, and full lesson content.
 
+## Enable real accounts
+
+1. Create a Supabase project.
+2. In the Supabase SQL Editor, run `supabase/schema.sql`.
+3. Copy `config.example.js` to `config.js` and replace the two placeholder values with the project URL and publishable key from Supabase.
+4. In Supabase Authentication settings, add `https://raiyan-eng.github.io/StudyMonkey/` as an allowed redirect URL.
+
+The publishable key is safe to use in the browser. Never put a Supabase service-role key or an OpenAI API key in this project.
+
