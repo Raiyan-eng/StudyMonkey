@@ -1,4 +1,4 @@
-import { initAuth } from './auth.js?v=firebase-1';
+import { initAuth } from './auth.js?v=firebase-2';
 
 const subjects = {
   Biology: ['Classification', 'Cells'], Mathematics: ['Number', 'Algebra'], 'Computer Science': ['Data', 'Networks'],
