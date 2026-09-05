@@ -1,2 +1,9 @@
-export const SUPABASE_URL = 'https://kuzulihuitsnsbtpzily.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1enVsaWh1aXRzbnNidHB6aWx5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1ODc2OTAsImV4cCI6MjEwNDE2MzY5MH0.fFbMf3OFVQ4dVEzEC5jDi3Fk7Gi76b3MZYfJH6GDums';
+export const FIREBASE_CONFIG = {
+  apiKey: 'AIzaSyDLc3Y8CDCSCxlMUchQxjWLKymwga-E6us',
+  authDomain: 'studymonkey-4be3e.firebaseapp.com',
+  projectId: 'studymonkey-4be3e',
+  storageBucket: 'studymonkey-4be3e.firebasestorage.app',
+  messagingSenderId: '190856108981',
+  appId: '1:190856108981:web:6c95fdf64f52665ad857fc',
+  measurementId: 'G-4LT4MPFR3H'
+};
