@@ -42,11 +42,17 @@ p { color: #aebbd0; line-height: 1.5; }
 .modal.hidden { display: none; }
 .modal-box { width: min(980px, 100%); max-height: 90vh; overflow: auto; padding: 30px; border-radius: 20px; background: #101b2e; border: 1px solid #36577e; }
 .auth-screen { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 80% 5%, #1479ff35, transparent 30rem), #060b16; }
+.onboarding { min-height: 100vh; display: grid; place-items: center; padding: 24px; background: radial-gradient(circle at 80% 5%, #1479ff35, transparent 30rem), #060b16; }
 .auth-card { width: min(470px, 100%); padding: 34px; border: 1px solid #36577e; border-radius: 20px; background: #101b2e; }
+.onboarding-card { width: min(760px, 100%); padding: 34px; border: 1px solid #36577e; border-radius: 20px; background: #101b2e; }
+.subject-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 24px 0; }
+.subject-picker label { padding: 12px; border: 1px solid #36577e; border-radius: 10px; color: #d8e5f7; }
 .auth-card label { display: grid; gap: 7px; margin: 16px 0; color: #d8e5f7; font-weight: 700; }
 .auth-card input { padding: 12px; border: 1px solid #36577e; border-radius: 9px; color: #fff; background: #0b1526; }
 .auth-card form { display: grid; gap: 8px; }
 .auth-card form button { border: 1px solid #36577e; border-radius: 9px; padding: 12px; color: #fff; background: #172842; }
+.text-button { margin-top: 9px; padding: 0; border: 0; background: transparent; color: #9bc7ff; text-decoration: underline; }
+.profile .text-button { font-size: .82rem; }
 .auth-note { font-size: .85rem; }
 .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; }
 .plan { padding: 20px; border: 1px solid #36577e; border-radius: 14px; }
@@ -58,4 +64,3 @@ p { color: #aebbd0; line-height: 1.5; }
 .eye .card, .eye .lesson, .eye .chat, .eye .results, .eye .modal-box { background: #fff9ef; border-color: #d2bfa2; }
 .eye p, .eye .nav button, .eye .profile { color: #685b4a; }
 @media (max-width: 760px) { .shell { grid-template-columns: 1fr; } .sidebar { min-height: auto; } .nav { grid-template-columns: repeat(2, 1fr); margin: 20px 0; } .profile { position: static; } .content { padding: 25px 18px; } .ask { flex-direction: column; } }
-
