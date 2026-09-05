@@ -1,2 +1,8 @@
-export const SUPABASE_URL = 'https://your-project.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY = 'your-publishable-key';
+export const FIREBASE_CONFIG = {
+  apiKey: 'your-api-key',
+  authDomain: 'your-project.firebaseapp.com',
+  projectId: 'your-project-id',
+  storageBucket: 'your-project.firebasestorage.app',
+  messagingSenderId: 'your-sender-id',
+  appId: 'your-app-id'
+};
