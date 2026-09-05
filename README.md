@@ -1,30 +1,28 @@
 # StudyMonkey
 
-A browser-based MVP prototype for an IGCSE AI study tutor.
+A browser-based MVP for a Cambridge IGCSE study tutor.
 
-## Run it
+## Included features
 
-Open `index.html` in a browser. No installation is required.
-
-## Included prototype features
-
-- Subject selection: Biology, Mathematics, Computer Science, Physics, Chemistry, Additional Maths, Accounting, Economics, Business Studies, and English.
-- First-login subject picker, so a student only sees the subjects they study.
-- Chapter 1–2 dashboard structure for every subject.
-- Subject-specific starter lessons, summary, browser read-aloud, tutor, quiz, results, and progress flow.
+- Firebase email/password accounts with verification, password reset, and sign-out.
+- Private Firestore progress storage protected by per-student security rules.
+- First-login subject picker for ten IGCSE subjects.
+- Subject-specific starter lessons, summaries, read-aloud, quizzes, and progress.
 - Dark and eye-soothing display modes.
-- Browser-data deletion control, sign-out, and account recovery link.
-- Three-session free trial counter and a clearly labelled subscription-plan preview (no payments are taken).
+- Three-session free trial counter and a subscription preview that takes no payments.
 
-## Before launch
+## Firebase setup
 
-This is a front-end prototype. Accounts and private student-data storage are connected through Supabase. A production version still needs server-side AI calls, payment processing, a real privacy policy, account-deletion support, and full lesson content.
+1. Register a Firebase web app and place its public configuration in `config.js`.
+2. Enable Email/Password in Firebase Authentication.
+3. Create a Standard-edition Firestore database in Production mode.
+4. Replace the database rules in the Firebase console with `firestore.rules`, then publish them.
+5. Add `raiyan-eng.github.io` under Authentication > Settings > Authorized domains if it is not already listed.
 
-## Enable real accounts
+The Firebase web configuration is public and safe for browser use. Never add private service-account credentials or an OpenAI API key to this repository.
 
-1. Create a Supabase project.
-2. In the Supabase SQL Editor, run `supabase/schema.sql`.
-3. Copy `config.example.js` to `config.js` and replace the two placeholder values with the project URL and publishable key from Supabase.
-4. In Supabase Authentication settings, add `https://raiyan-eng.github.io/StudyMonkey/` as an allowed redirect URL.
+## Still needed before a full launch
 
-The publishable key is safe to use in the browser. Never put a Supabase service-role key or an OpenAI API key in this project.
+- A secure server-side AI tutor connection.
+- Payment processing for subscription plans.
+- Full original curriculum content and a reviewed privacy policy.
