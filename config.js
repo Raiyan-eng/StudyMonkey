@@ -1,3 +1,2 @@
 export const SUPABASE_URL = 'https://kuzulihuitsnsbtpzily.supabase.co';
 export const SUPABASE_PUBLISHABLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1enVsaWh1aXRzbnNidHB6aWx5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1ODc2OTAsImV4cCI6MjEwNDE2MzY5MH0.fFbMf3OFVQ4dVEzEC5jDi3Fk7Gi76b3MZYfJH6GDums';
-
