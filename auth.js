@@ -17,13 +17,17 @@ import {
   serverTimestamp,
   setDoc
 } from 'https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js';
-import { FIREBASE_CONFIG } from './config.js?v=firebase-2';
+import { FIREBASE_CONFIG } from './config.js?v=firebase-3';
 
 const configured = FIREBASE_CONFIG.apiKey?.length > 20 && FIREBASE_CONFIG.projectId?.length > 2;
+let signInNotice = '';
 
 export async function initAuth(fallbackState) {
-  window.studymonkeyAuth = { isConfigured: configured, email: null, storageKey: 'studymonkey', storageReady: false, syncState: () => {} };
-  if (!configured) return readLocalState('studymonkey', fallbackState);
+  window.studymonkeyAuth = { isConfigured: configured, email: null, emailVerified: false, storageReady: false, syncState: async () => false };
+  if (!configured) {
+    showConnectionProblem();
+    return fallbackState;
+  }
 
   let auth;
   let database;
@@ -41,8 +45,7 @@ export async function initAuth(fallbackState) {
   if (!user) user = await showAuthGate(auth);
   if (!user) return fallbackState;
 
-  const storageKey = `studymonkey:${user.uid}`;
-  let state = readLocalState(storageKey, fallbackState);
+  let state = { ...fallbackState };
   let storageReady = false;
   try {
     const studentSnapshot = await getDoc(doc(database, 'students', user.uid));
@@ -66,27 +69,42 @@ export async function initAuth(fallbackState) {
     storageReady = false;
   }
 
+  let syncQueue = Promise.resolve();
   window.studymonkeyAuth = {
     isConfigured: true,
     email: user.email,
-    storageKey,
+    emailVerified: user.emailVerified,
     storageReady,
+    signInNotice,
     signOut: async () => {
       await signOut(auth);
       window.location.reload();
     },
-    syncState: async currentState => {
+    resendVerification: async () => {
+      if (user.emailVerified) return 'Your email is already verified.';
       try {
+        await sendEmailVerification(user, actionCodeSettings());
+        return 'Verification email sent. Check your inbox and spam folder.';
+      } catch (error) {
+        return friendlyAuthError(error.code);
+      }
+    },
+    syncState: currentState => {
+      const stateSnapshot = JSON.parse(JSON.stringify(currentState));
+      syncQueue = syncQueue.catch(() => undefined).then(async () => {
         await setDoc(doc(database, 'students', user.uid), {
           email: user.email,
-          subjects: currentState.subjects,
-          appState: createCloudAppState(currentState),
+          subjects: stateSnapshot.subjects,
+          appState: createCloudAppState(stateSnapshot),
           updatedAt: serverTimestamp()
         }, { merge: true });
         window.studymonkeyAuth.storageReady = true;
-      } catch (error) {
+        return true;
+      }).catch(() => {
         window.studymonkeyAuth.storageReady = false;
-      }
+        return false;
+      });
+      return syncQueue;
     }
   };
   return state;
@@ -97,13 +115,8 @@ function createCloudAppState(state) {
   return appState;
 }
 
-function readLocalState(storageKey, fallbackState) {
-  try {
-    const savedState = localStorage.getItem(storageKey);
-    return savedState ? { ...fallbackState, ...JSON.parse(savedState) } : fallbackState;
-  } catch (error) {
-    return fallbackState;
-  }
+function actionCodeSettings() {
+  return { url: `${window.location.origin}${window.location.pathname}` };
 }
 
 function waitForUser(auth) {
@@ -135,11 +148,10 @@ function showAuthGate(auth) {
           : await signInWithEmailAndPassword(auth, emailInput.value.trim(), passwordInput.value);
         if (creatingAccount && !credential.user.emailVerified) {
           try {
-            await sendEmailVerification(credential.user, {
-              url: `${window.location.origin}${window.location.pathname}`
-            });
+            await sendEmailVerification(credential.user, actionCodeSettings());
+            signInNotice = 'We sent a verification email. You can keep studying while you verify it.';
           } catch (error) {
-            message.textContent = 'Your account was created, but the verification email could not be sent yet.';
+            signInNotice = 'Your account was created, but the verification email could not be sent yet.';
           }
         }
         resolve(credential.user);
@@ -161,9 +173,7 @@ function showAuthGate(auth) {
       }
       message.textContent = 'Sending reset email...';
       try {
-        await sendPasswordResetEmail(auth, emailInput.value.trim(), {
-          url: `${window.location.origin}${window.location.pathname}`
-        });
+        await sendPasswordResetEmail(auth, emailInput.value.trim(), actionCodeSettings());
         message.textContent = 'Check your email for a password-reset link.';
       } catch (error) {
         message.textContent = friendlyAuthError(error.code);
