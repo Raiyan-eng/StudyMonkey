@@ -10,6 +10,7 @@ A browser-based MVP for a Cambridge IGCSE study tutor.
 - Subject-specific starter lessons, summaries, read-aloud, quizzes, and progress.
 - Dark and eye-soothing display modes.
 - Three-session free trial counter and a subscription preview that takes no payments.
+- A private AI tutor API that receives the current subject and unit with every question.
 
 ## Firebase setup
 
@@ -21,8 +22,24 @@ A browser-based MVP for a Cambridge IGCSE study tutor.
 
 The Firebase web configuration is public and safe for browser use. Never add private service-account credentials or an OpenAI API key to this repository.
 
+## Make the AI tutor live
+
+The website stays on GitHub Pages. The private tutor API should be deployed as a separate Vercel project so its secrets never appear in the website code.
+
+1. Create a Vercel account and import the `StudyMonkey` GitHub repository.
+2. In Vercel Project Settings > Environment Variables, add these private values from `.env.example`:
+   - `OPENAI_API_KEY`: create this in the OpenAI platform, then add it only in Vercel.
+   - `FIREBASE_SERVICE_ACCOUNT`: the entire Firebase Admin service-account JSON, stored as one line.
+   - `ALLOWED_ORIGIN`: `https://raiyan-eng.github.io`
+   - `OPENAI_MODEL`: `gpt-5`
+3. Deploy the Vercel project. Copy its public address ending in `/api/tutor`.
+4. Put that address in `TUTOR_API_URL` in `config.js`, then publish the website update.
+
+The endpoint checks that a caller is signed in with Firebase, accepts questions only from StudyMonkey, limits each user to 30 questions per hour in one server instance, and keeps OpenAI requests private. The simple rate limit is an early safeguard; a production subscription system should replace it with a shared database-based limit.
+
 ## Still needed before a full launch
 
 - A secure server-side AI tutor connection.
 - Payment processing for subscription plans.
 - Full original curriculum content and a reviewed privacy policy.
+
