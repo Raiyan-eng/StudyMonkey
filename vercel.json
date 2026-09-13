@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "api/tutor.mjs": {
+      "maxDuration": 30
+    }
+  }
+}
+
