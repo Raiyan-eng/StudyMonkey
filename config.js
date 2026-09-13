@@ -8,3 +8,6 @@ export const FIREBASE_CONFIG = {
   measurementId: 'G-4LT4MPFR3H'
 };
 
+// Public server address only. Keep the OpenAI key on the private server.
+export const TUTOR_API_URL = '';
+
