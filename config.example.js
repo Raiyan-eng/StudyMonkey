@@ -6,3 +6,6 @@ export const FIREBASE_CONFIG = {
   messagingSenderId: 'your-sender-id',
   appId: 'your-app-id'
 };
+
+export const TUTOR_API_URL = 'https://your-studymonkey-api.vercel.app/api/tutor';
+
