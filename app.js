@@ -2,7 +2,7 @@ import { initAuth } from './auth.js?v=firebase-3';
 import { curriculum, getLesson } from './curriculum.js?v=curriculum-1';
 import { TUTOR_API_URL } from './config.js?v=tutor-1';
 
-const releaseVersion = 'v1.1.0';
+const releaseVersion = 'v1.2.0';
 const subjects = curriculum;
 const firstLessons = {
   Biology: { explanation: 'Living things grow, use energy, respond to changes and reproduce. We learn science best by breaking one big idea into small steps.', term: 'Organism: a living thing.', example: 'A seed can grow into a plant.' },
@@ -61,8 +61,8 @@ function consumeTrial(next) { if(state.trial<=0){showPlans();return;} state.tria
 function finishQuiz(correct) { const subject=state.current||state.subjects[0], correctAnswer=quizQuestions[subject][1][quizQuestions[subject][2]]; state.scores.push(correct?1:0);save(); app.innerHTML=shell(`<div class="results"><div class="eyebrow">QUIZ COMPLETE</div><h1>${correct?'Nice work!':'Good try!'}</h1><p>${correct?'That answer is correct.':`The correct answer is: ${correctAnswer}.`}</p><div class="notice">Next step: ${correct?'Continue to Chapter 2.':'Ask the tutor for another example, then retry.'}</div><p><button class="primary" onclick="go('learn')">Continue learning</button> <button onclick="go('tutor')">Ask the tutor</button></p></div>`); }
 function showPlans() { document.querySelector('#plans').classList.remove('hidden'); }
 function closePlans() { document.querySelector('#plans').classList.add('hidden'); }
-function selectPlan(plan) { document.querySelector('#plan-message').textContent = `${plan} is planned, but payments are not live yet. No money has been taken.`; }
-document.body.insertAdjacentHTML('beforeend', `<div id="plans" class="modal hidden"><div class="modal-box"><button onclick="closePlans()">Close</button><h2>Choose your study plan</h2><p>Start with 3 free AI lesson sessions. Plans below are a preview only until payments are connected.</p><div class="plans"><div class="plan"><h3>Free trial</h3><p>3 AI lesson sessions, tutor explanations, mini quizzes.</p></div><div class="plan featured"><h3>Study Plus</h3><p>Unlimited tutor questions, lessons, quizzes, progress, and audio.</p><button class="primary" onclick="selectPlan('Study Plus')">I’m interested</button></div><div class="plan"><h3>Exam Pro</h3><p>Everything in Plus, revision plans, exam practice, and reminders.</p><button onclick="selectPlan('Exam Pro')">I’m interested</button></div></div><p id="plan-message" role="status"></p></div></div>`);
+function selectPlan() { document.querySelector('#plan-message').textContent = 'StudyMonkey is free while we build it. StudyMonkey Plus will be available later with extra exam practice and personalised revision plans.'; }
+document.body.insertAdjacentHTML('beforeend', `<div id="plans" class="modal hidden"><div class="modal-box"><button onclick="closePlans()">Close</button><h2>StudyMonkey is free for now</h2><p>Use the tutor, lessons, quizzes, audio, and progress tracker without payment while the app is being built.</p><div class="plans"><div class="plan featured"><h3>StudyMonkey Plus</h3><p>One optional future subscription with extra exam practice, personalised revision plans, and priority new features.</p><button class="primary" onclick="selectPlan()">Tell me about Plus</button></div></div><p id="plan-message" role="status"></p></div></div>`);
 Object.assign(window, { askTutor, changeLabSubject, changeSubject, closePlans, consumeTrial, finishOnboarding, finishQuiz, go, openChapter, openSubject, readLesson, resendVerification, selectPlan, setMode, showPlans, showSummary, signOut, toggleSubject });
 render();
 
