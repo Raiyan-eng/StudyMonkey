@@ -9,7 +9,7 @@ A browser-based MVP for a Cambridge IGCSE study tutor.
 - First-login subject picker for ten IGCSE subjects.
 - Subject-specific starter lessons, summaries, read-aloud, quizzes, and progress.
 - Dark and eye-soothing display modes.
-- Three-session free trial counter and a subscription preview that takes no payments.
+- Free access during the MVP launch, with one optional StudyMonkey Plus plan preview for later.
 - A private AI tutor API that receives the current subject and unit with every question.
 
 ## Firebase setup
@@ -37,9 +37,13 @@ The website stays on GitHub Pages. The private tutor API should be deployed as a
 
 The endpoint checks that a caller is signed in with Firebase, accepts questions only from StudyMonkey, limits each user to 30 questions per hour in one server instance, and keeps OpenAI requests private. The simple rate limit is an early safeguard; a production subscription system should replace it with a shared database-based limit.
 
+## Check the tutor deployment
+
+Open the deployed `/api/tutor` address in a browser. A successful deployment returns a small status response. `configured: true` means both private server credentials are present.
+
 ## Still needed before a full launch
 
 - A secure server-side AI tutor connection.
-- Payment processing for subscription plans.
+- Payment processing only if StudyMonkey Plus is introduced later.
 - Full original curriculum content and a reviewed privacy policy.
 
