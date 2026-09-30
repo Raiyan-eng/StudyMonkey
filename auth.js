@@ -23,6 +23,20 @@ const configured = FIREBASE_CONFIG.apiKey?.length > 20 && FIREBASE_CONFIG.projec
 let signInNotice = '';
 
 export async function initAuth(fallbackState) {
+  if (localStorage.getItem('studymonkey-demo') === 'true') {
+    window.studymonkeyAuth = {
+      isConfigured: configured,
+      isDemo: true,
+      email: 'Explorer mode',
+      emailVerified: true,
+      storageReady: true,
+      getIdToken: async () => null,
+      syncState: async state => { localStorage.setItem('studymonkey-demo-state', JSON.stringify(state)); return true; },
+      signOut: () => { localStorage.removeItem('studymonkey-demo'); localStorage.removeItem('studymonkey-demo-state'); window.location.reload(); }
+    };
+    const saved = JSON.parse(localStorage.getItem('studymonkey-demo-state') || 'null');
+    return saved || { ...fallbackState, onboarded: true, subjects: ['Biology', 'Mathematics', 'Computer Science', 'Physics', 'Chemistry', 'Additional Maths', 'Accounting', 'Economics', 'Business Studies', 'English'] };
+  }
   window.studymonkeyAuth = { isConfigured: configured, email: null, emailVerified: false, storageReady: false, getIdToken: async () => null, syncState: async () => false };
   if (!configured) {
     showConnectionProblem();
@@ -131,13 +145,17 @@ function waitForUser(auth) {
 
 function showAuthGate(auth) {
   const app = document.querySelector('#app');
-  app.innerHTML = `<main class="auth-screen"><section class="auth-card"><div class="eyebrow">STUDYMONKEY</div><h1>Your private study space</h1><p>Create an account to keep your subjects, progress, and quiz results safe across devices.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required autocomplete="email"></label><label>Password<input id="auth-password" type="password" minlength="8" required autocomplete="current-password"></label><p id="auth-message" role="status"></p><button class="primary" type="submit">Sign in</button><button id="sign-up" type="button">Create account</button><button id="reset-password" class="text-button" type="button">Forgot password?</button></form><p class="auth-note">Your password is handled securely by Firebase. New accounts receive a verification email.</p></section></main>`;
+  app.innerHTML = `<main class="auth-screen"><section class="launch-copy"><div class="launch-badge"><span></span> IGCSE LEARNING UNIVERSE</div><h1>Study like you're<br><em>leveling up.</em></h1><p>Ten subjects. Every syllabus unit. A personal AI tutor, interactive missions, audio explanations, quizzes and 3D learning worlds.</p><div class="launch-stats"><div><b>10</b><span>subject worlds</span></div><div><b>96</b><span>learning missions</span></div><div><b>24/7</b><span>AI tutor access</span></div></div><button id="demo-mode" class="demo-button" type="button"><span>Enter demo universe</span><i>→</i></button><small>No account needed. Your demo progress stays on this device.</small></section><section class="auth-stage"><div class="auth-orbit" aria-hidden="true"><span class="planet planet-a">Σ</span><span class="planet planet-b">DNA</span><span class="planet planet-c">01</span><div class="orbit-core">SM</div></div><section class="auth-card"><div class="eyebrow">PLAYER LOGIN</div><h2>Continue your journey</h2><p>Sign in to sync progress across devices.</p><form id="auth-form"><label>Email<input id="auth-email" type="email" required autocomplete="email" placeholder="you@example.com"></label><label>Password<input id="auth-password" type="password" minlength="8" required autocomplete="current-password" placeholder="8+ characters"></label><p id="auth-message" role="status"></p><button class="primary" type="submit">Enter StudyMonkey</button><button id="sign-up" type="button">Create new player</button><button id="reset-password" class="text-button" type="button">Forgot password?</button></form><p class="auth-note">Secured by Firebase. We never see your password.</p></section></section></main>`;
 
   return new Promise(resolve => {
     const form = document.querySelector('#auth-form');
     const message = document.querySelector('#auth-message');
     const emailInput = document.querySelector('#auth-email');
     const passwordInput = document.querySelector('#auth-password');
+    document.querySelector('#demo-mode').addEventListener('click', () => {
+      localStorage.setItem('studymonkey-demo', 'true');
+      window.location.reload();
+    });
 
     const submit = async creatingAccount => {
       if (!form.reportValidity()) return;
