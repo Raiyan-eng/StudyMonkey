@@ -1,5 +1,4 @@
-import * as THREE from 'https://unpkg.com/three@0.181.1/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.181.1/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
 
 const models = {
   Biology: { label: 'Animal cell explorer', description: 'A simplified cell model. Drag around it and identify the cell membrane, nucleus and mitochondria.', type: 'cell', colour: 0x38d996 },
@@ -69,14 +68,25 @@ export function mountStudyModel(container, subject, descriptionNode) {
   renderer.setSize(container.clientWidth || 620, 420); container.replaceChildren(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, (container.clientWidth || 620) / 420, .1, 100); camera.position.set(0, 1, 7);
-  const controls = new OrbitControls(camera, renderer.domElement); controls.enableDamping = true; controls.autoRotate = true; controls.autoRotateSpeed = .8;
   scene.add(new THREE.HemisphereLight(0xe6f2ff, 0x07111f, 2.6));
   const light = new THREE.DirectionalLight(0xffffff, 2.4); light.position.set(4, 5, 5); scene.add(light);
   const object = createModel(model); scene.add(object);
   let frame;
-  const render = () => { object.rotation.y += .002; object.children.filter(item => item.name === 'orbiter').forEach(item => { const time = performance.now() * .001; item.position.set(Math.cos(time) * item.userData.radius, Math.sin(time) * .65, Math.sin(time) * item.userData.radius); }); controls.update(); renderer.render(scene, camera); frame = requestAnimationFrame(render); };
+  let dragging = false;
+  let lastPointer = { x: 0, y: 0 };
+  const startDrag = event => { dragging = true; lastPointer = { x: event.clientX, y: event.clientY }; renderer.domElement.setPointerCapture?.(event.pointerId); };
+  const drag = event => { if (!dragging) return; object.rotation.y += (event.clientX - lastPointer.x) * .009; object.rotation.x += (event.clientY - lastPointer.y) * .006; lastPointer = { x: event.clientX, y: event.clientY }; };
+  const stopDrag = () => { dragging = false; };
+  const zoom = event => { event.preventDefault(); camera.position.z = THREE.MathUtils.clamp(camera.position.z + event.deltaY * .006, 4.5, 11); };
+  renderer.domElement.addEventListener('pointerdown', startDrag);
+  renderer.domElement.addEventListener('pointermove', drag);
+  renderer.domElement.addEventListener('pointerup', stopDrag);
+  renderer.domElement.addEventListener('pointercancel', stopDrag);
+  renderer.domElement.addEventListener('wheel', zoom, { passive: false });
+  const render = () => { if (!dragging) object.rotation.y += .0035; object.children.filter(item => item.name === 'orbiter').forEach(item => { const time = performance.now() * .001; item.position.set(Math.cos(time) * item.userData.radius, Math.sin(time) * .65, Math.sin(time) * item.userData.radius); }); renderer.render(scene, camera); frame = requestAnimationFrame(render); };
   render();
   const observer = new ResizeObserver(() => { const width = container.clientWidth || 620; camera.aspect = width / 420; camera.updateProjectionMatrix(); renderer.setSize(width, 420); });
   observer.observe(container);
-  return () => { cancelAnimationFrame(frame); observer.disconnect(); controls.dispose(); renderer.dispose(); };
+  return () => { cancelAnimationFrame(frame); observer.disconnect(); renderer.domElement.removeEventListener('pointerdown', startDrag); renderer.domElement.removeEventListener('pointermove', drag); renderer.domElement.removeEventListener('pointerup', stopDrag); renderer.domElement.removeEventListener('pointercancel', stopDrag); renderer.domElement.removeEventListener('wheel', zoom); renderer.dispose(); };
 }
+
