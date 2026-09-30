@@ -213,3 +213,40 @@ body { background: radial-gradient(circle at 78% -10%, rgb(20 121 255 / .28), tr
 .lab-copy .status-chip{display:inline-flex;margin-bottom:18px}.lab-copy h2{font-size:clamp(1.8rem,3vw,3rem);letter-spacing:-.04em}.lab-keys{display:flex;gap:10px;margin:24px 0}.lab-keys span{display:grid;padding:10px 12px;border:1px solid rgba(84,166,247,.2);border-radius:10px;color:#6f89a8;font-size:.62rem;letter-spacing:.1em}.lab-keys b{color:#dcecff;font-size:.75rem;letter-spacing:0}
 @keyframes cssOrbit{to{transform:rotate(360deg) rotateX(52deg)}}@keyframes modelFloat{50%{transform:translateY(-13px) rotate(4deg);border-radius:57% 43% 45% 55%}}@keyframes orbitWobble{50%{transform:rotate(-8deg) rotateY(32deg)}}
 
+/* v2.1 aesthetic refinement */
+:root{font-family:"Manrope",system-ui,sans-serif;--ink:#f4f8ff;--muted:#8290a7;--line:rgba(139,176,224,.13);--panel:rgba(7,15,29,.88);--blue:#5bb8ff;--blue-strong:#1688ff}
+body{background:#030711;color:var(--ink);font-size:15px}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.21;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E")}
+h1,h2,h3,.brand,.world-tile strong{font-family:"Space Grotesk","Manrope",sans-serif}
+p{color:var(--muted);line-height:1.68}
+button,select,input{font-family:inherit}
+.shell{grid-template-columns:230px minmax(0,1fr)}
+.sidebar{padding:25px 15px;background:rgba(3,8,17,.94);border-right:1px solid var(--line);box-shadow:none}
+.brand{gap:11px;font-size:1.1rem;letter-spacing:-.025em}.brand>span{width:31px;height:31px;border-radius:9px;font-size:.63rem;background:linear-gradient(145deg,#238fff,#074990);box-shadow:0 8px 24px rgba(13,108,222,.24)}
+.subject-label{padding-left:42px;color:#53647c;font-size:.59rem;letter-spacing:.13em}
+.nav{gap:3px;margin:42px 0}.nav button{min-height:45px;padding:8px 10px;border:1px solid transparent;border-radius:9px;color:#8795a9;font-size:.85rem;font-weight:600}.nav button i{width:28px;height:28px;border-radius:7px;font-size:.72rem;background:transparent;color:#52677f}.nav button:hover:not(.active){background:rgba(91,184,255,.05);color:#dbeaff;transform:translateX(2px)}
+.nav button.active{background:linear-gradient(90deg,rgba(24,121,237,.16),rgba(24,121,237,.035));border-color:rgba(65,158,255,.17);box-shadow:inset 2px 0 #48b4ff;color:#f4f9ff}.nav button.active i{background:rgba(55,158,255,.14);color:#73c9ff}
+.profile{padding:17px 5px 2px;border-color:var(--line);font-size:.77rem}.profile small{font-size:.68rem}.profile-dot{width:7px;height:7px}
+.content{max-width:1440px;padding:54px clamp(30px,5vw,76px) 110px}
+.content:before{inset:0 0 0 230px;opacity:.55;background-size:80px 80px}
+.command-bar{align-items:center;margin-bottom:36px}.command-bar h1{max-width:850px;font-size:clamp(3.15rem,6.2vw,6.2rem);line-height:.9;letter-spacing:-.065em}.command-bar>div>p:last-child{max-width:520px;margin-top:18px}.command-bar select,.toolbar select{min-width:190px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(7,17,33,.86);color:#dbe9fa}
+.mission-kicker{color:#65bfff;font-size:.65rem;letter-spacing:.18em}
+.mission-deck{grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);min-height:480px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,rgba(7,17,34,.95),rgba(7,28,53,.7));box-shadow:0 24px 80px rgba(0,0,0,.26)}
+.mission-copy{padding:clamp(34px,5vw,70px)}.mission-copy h2{max-width:760px;font-size:clamp(2.4rem,4.4vw,5rem);line-height:.95;letter-spacing:-.062em}.mission-copy>p{max-width:690px;font-size:.96rem}.status-chip{padding:7px 10px;border-radius:6px;background:rgba(42,145,255,.09);border:1px solid rgba(86,179,255,.14);color:#76c7ff;font-size:.62rem;letter-spacing:.13em}
+.mission-actions{margin-top:28px}.mission-actions button,.actions button,.lab-copy button{border-radius:8px;padding:11px 15px}
+.primary{border-radius:8px!important;background:linear-gradient(110deg,#1179e9,#209dff);box-shadow:0 10px 28px rgba(11,112,228,.2)}
+.cell-scan{margin:32px;border:0;border-left:1px solid var(--line);border-radius:0;background:radial-gradient(circle,rgba(27,133,246,.15),transparent 63%);box-shadow:none}
+.player-strip{margin-top:12px;padding:18px 22px;border:1px solid var(--line);border-radius:12px;background:rgba(5,13,25,.65);box-shadow:none}.player-strip span{color:#53647c;font-size:.6rem;letter-spacing:.13em}.player-strip strong{font-family:"Space Grotesk";font-size:1.3rem}.mastery-track{height:3px;background:#111d2c}
+.worlds{margin-top:64px}.section-heading{margin-bottom:20px}.section-heading h2{font-size:1.65rem;letter-spacing:-.035em}.section-heading p{margin-top:4px}
+.world-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.world-tile{min-height:160px;padding:18px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(150deg,rgba(9,20,38,.9),rgba(4,10,20,.94));box-shadow:none}.world-tile strong{font-size:1rem}.world-tile small{color:#64758c}.world-tile i{font-size:.72rem}.world-index{font-size:.65rem}
+.toolbar{align-items:flex-end;margin-bottom:30px}.toolbar h1{max-width:900px;font-size:clamp(2.5rem,5vw,5rem);line-height:1;letter-spacing:-.06em}.toolbar>div>p:last-child{max-width:650px}
+.unit-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.unit-button{min-height:76px;padding:13px 14px;border-color:var(--line);border-radius:9px;background:rgba(7,17,31,.75);font-size:.78rem}.unit-button span{font-size:.58rem}.unit-button.active{border-color:rgba(89,182,255,.38);background:linear-gradient(135deg,rgba(22,112,214,.18),rgba(8,25,48,.85));box-shadow:none}
+.lesson,.cell-mission,.lab-panel,.card,.chat,.results{border-color:var(--line);border-radius:14px;background:rgba(7,16,30,.82);box-shadow:0 22px 60px rgba(0,0,0,.17)}
+.lesson{max-width:none;padding:clamp(25px,4vw,48px)}.terms{grid-template-columns:1fr 1fr}.term{border:1px solid rgba(130,170,222,.08);background:rgba(3,10,21,.58)}
+.lab-panel{border-radius:16px}.lab-copy{background:rgba(5,13,26,.88)}
+.auth-card{border-radius:16px;background:rgba(6,16,32,.88)}
+.launch-copy h1{font-family:"Space Grotesk";font-weight:700;letter-spacing:-.075em}.launch-copy>p{color:#8d9aaf}.launch-badge{border-radius:8px;background:rgba(8,28,52,.7)}
+@media(max-width:1200px){.world-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.unit-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;padding:18px}.subject-label{padding-left:42px}.nav{display:flex;overflow:auto;margin:18px 0 0;padding-bottom:5px}.nav button{flex:0 0 auto}.profile{display:none}.content{padding:35px 20px 80px}.content:before{inset:0}.mission-deck{grid-template-columns:1fr}.cell-scan{border-left:0;border-top:1px solid var(--line);margin:0 25px 25px}.world-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.command-bar h1{font-size:3rem}.world-grid,.unit-grid{grid-template-columns:1fr}.mission-copy{padding:27px}.mission-copy h2{font-size:2.35rem}.player-strip{grid-template-columns:repeat(3,1fr)}.terms{grid-template-columns:1fr}}
+
