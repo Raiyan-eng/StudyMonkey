@@ -1,0 +1,11 @@
+{
+  "name": "studymonkey-tutor-api",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "firebase-admin": "^13.6.0",
+    "openai": "^6.28.0"
+  }
+}
+
