@@ -1,0 +1,18 @@
+{
+  "name": "StudyMonkey — IGCSE Learning OS",
+  "short_name": "StudyMonkey",
+  "description": "A game-like Cambridge IGCSE study companion.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#030711",
+  "theme_color": "#050b16",
+  "icons": [
+    {
+      "src": "studymonkey-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
