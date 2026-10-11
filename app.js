@@ -4,7 +4,7 @@ import { TUTOR_API_URL } from './config.js?v=tutor-1';
 let enhanceExperience = () => {};
 import('./experience.js?v=game-3').then(module => { enhanceExperience = module.enhanceExperience; enhanceExperience(screen); }).catch(() => {});
 
-const releaseVersion = 'v1.2.0';
+const releaseVersion = 'v1.3.0';
 const subjects = curriculum;
 const firstLessons = {
   Biology: { explanation: 'Living things grow, use energy, respond to changes and reproduce. We learn science best by breaking one big idea into small steps.', term: 'Organism: a living thing.', example: 'A seed can grow into a plant.' },
