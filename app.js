@@ -2,7 +2,7 @@ import { initAuth } from './auth.js?v=firebase-3';
 import { curriculum, getLesson } from './curriculum.js?v=curriculum-1';
 import { TUTOR_API_URL } from './config.js?v=tutor-1';
 let enhanceExperience = () => {};
-import('./experience.js?v=game-3').then(module => { enhanceExperience = module.enhanceExperience; enhanceExperience(screen); }).catch(() => {});
+import('./experience.js?v=game-4').then(module => { enhanceExperience = module.enhanceExperience; enhanceExperience(screen); }).catch(() => {});
 
 const releaseVersion = 'v1.3.0';
 const subjects = curriculum;
