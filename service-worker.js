@@ -1,4 +1,4 @@
-const CACHE = 'studymonkey-v2-2';
+const CACHE = 'studymonkey-v2-3';
 const CORE = ['./', './index.html', './styles.css', './app.js', './auth.js', './curriculum.js', './experience.js', './visual-lab.js', './manifest.webmanifest', './studymonkey-icon.svg'];
 self.addEventListener('install', event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting())));
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
