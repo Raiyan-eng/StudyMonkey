@@ -104,11 +104,17 @@ export function enhanceExperience(screen) {
   if (!reducedMotion.matches) {
     document.querySelectorAll('.world-tile, .mission-deck, .card, .lesson, .cell-mission, .lab-panel').forEach(element => cleanup.push(addTilt(element)));
     if (gsap) {
-      gsap.killTweensOf('.content > *');
-      gsap.fromTo('.content > *', { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .72, stagger: .075, ease: 'power3.out', clearProps: 'transform' });
-      gsap.fromTo('.sidebar', { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: 'power3.out' });
-      gsap.fromTo('.world-tile', { y: 44, scale: .94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .7, stagger: .055, delay: .14, ease: 'back.out(1.4)', clearProps: 'transform' });
-      if (screen === 'dashboard') gsap.fromTo('.cell-scan', { scale: .72, rotate: -8, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: 1.1, ease: 'expo.out' });
+      const contentItems = document.querySelectorAll('.content > *');
+      const sidebar = document.querySelector('.sidebar');
+      const worldTiles = document.querySelectorAll('.world-tile');
+      const cellScan = document.querySelector('.cell-scan');
+      if (contentItems.length) {
+        gsap.killTweensOf(contentItems);
+        gsap.fromTo(contentItems, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: .72, stagger: .075, ease: 'power3.out', clearProps: 'transform' });
+      }
+      if (sidebar) gsap.fromTo(sidebar, { x: -24, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: 'power3.out' });
+      if (worldTiles.length) gsap.fromTo(worldTiles, { y: 44, scale: .94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: .7, stagger: .055, delay: .14, ease: 'back.out(1.4)', clearProps: 'transform' });
+      if (screen === 'dashboard' && cellScan) gsap.fromTo(cellScan, { scale: .72, rotate: -8, opacity: 0 }, { scale: 1, rotate: 0, opacity: 1, duration: 1.1, ease: 'expo.out' });
     }
     motionAnimate('.nav button', { opacity: [0, 1], x: [-16, 0] }, { duration: .45, delay: stagger(.045), easing: 'ease-out' });
     motionAnimate('.player-strip > div', { opacity: [0, 1], y: [16, 0] }, { duration: .5, delay: stagger(.07), easing: [.22, 1, .36, 1] });
